@@ -1,4 +1,5 @@
 import { authService, firebaseInstance } from "fbase";
+import firebase from "firebase/app";
 import React, { useState } from "react";
 
 const Auth = () => {
@@ -46,8 +47,8 @@ const Auth = () => {
     } else if (name === "github") {
       provider = new firebaseInstance.auth.GithubAuthProvider();
     }
-    const data = await authService.signInWithPopup(provider);
-    console.log(data);
+    await authService.signInWithPopup(provider);
+    
   };
   return (
     <div>
@@ -56,7 +57,7 @@ const Auth = () => {
           name="email"
           type="email"
           placeholder="Email"
-          requireda
+          required
           value={email}
           onChange={onChange}
         />

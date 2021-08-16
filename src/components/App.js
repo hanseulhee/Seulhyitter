@@ -13,9 +13,11 @@ function App() {
         setIsLoggedIn(false);
       }
       setInit(true);
+
     });
   }, []);
-  return (
+  
+return (
     <>
       {init ? <AppRouter isLoggedIn={isLoggedIn} /> : "Initializing..."}
       <footer>&copy; {new Date().getFullYear()} Seulhyitter </footer>
