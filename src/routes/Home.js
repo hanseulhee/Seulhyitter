@@ -1,13 +1,25 @@
 import { dbService } from "fbase";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Shyweet from "components/Shyweet";
 
-const Home = () => {
+const Home = ({ userObj }) => {
   const [Shweet, setShweet] = useState("");
+  const [shweets, setShweets] = useState([]);
+  useEffect(() => {
+    dbService.collection("shweets").onSnapshot((snapshot) => {
+      const shweetArray = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setShweets(shweetArray);
+    });
+  }, []);
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection("shweets").add({
-        Shweet,
-        createdAt: Date.now(),
+      text: Shweet,
+      createdAt: Date.now(),
+      creatorId: userObj.uid,
     });
     setShweet("");
   };
@@ -29,6 +41,15 @@ const Home = () => {
         />
         <input type="submit" value="Seulhyitter" />
       </form>
+      <div>
+        {shweets.map((Shweet) => (
+          <Shyweet
+            key={Shweet.id}
+            shyweetObj={Shweet}
+            isOwner={Shweet.creatorId === userObj.uid}
+          />
+        ))}
+      </div>
     </div>
   );
 };
